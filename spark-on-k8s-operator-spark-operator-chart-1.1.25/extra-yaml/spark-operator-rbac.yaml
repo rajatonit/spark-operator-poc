@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spark-operator
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sparkoperator
+  namespace: spark-operator #<<--  เปลี่ยนมา namespace ของเรา
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: sparkoperator
+  namespace: spark-operator
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["configmaps"] #<<--- เพิ่ม configmaps
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["services", "secrets"]
+  verbs: ["create", "get", "delete"]
+- apiGroups: ["extensions"]
+  resources: ["ingresses"]
+  verbs: ["create", "get", "delete"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"] #<<--- เพิ่ม PVC
+  verbs: ["*"]
+- apiGroups: [""]
+--- 
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: sparkoperator
+  namespace: spark-operator #<<--- เปลี่ยนมา namespace ของเรา
+subjects:
+..
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+  name: sparkoperator-aggregate-to-admin
+  namespace: spark-operator #<<--- เปลี่ยนมา namespace ของเรา
