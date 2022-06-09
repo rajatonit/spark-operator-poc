@@ -18,7 +18,7 @@ spec:
       hostPath:
         path: "/tmp"
         type: Directory
-    - name: gcp-cred 
+    - name: gcp-cred
       secret:
         secretName: google-sa-key
   driver:
@@ -48,6 +48,6 @@ spec:
     "spark.kubernetes.executor.secrets.google-sa-key": "/creds"
     "spark.hadoop.fs.AbstractFileSystem.gs.impl": "com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS"
     "spark.hadoop.fs.gs.project.id": "wsdsw-sandbox"
-    "spark.hadoop.google.cloud.auth.service.account.enable" : "true"
+    "spark.hadoop.google.cloud.auth.service.account.enable": "true"
     "spark.kubernetes.driverEnv.GOOGLE_APPLICATION_CREDENTIALS": "/creds/google_sa_key.json"
-    "spark.executorEnv.GOOGLE_APPLICATION_CREDENTIALS": "/creds/google_sa_key.json" 
+    "spark.executorEnv.GOOGLE_APPLICATION_CREDENTIALS": "/creds/google_sa_key.json"
