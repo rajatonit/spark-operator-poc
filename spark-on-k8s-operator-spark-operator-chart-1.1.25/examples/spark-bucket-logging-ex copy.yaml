@@ -1,0 +1,29 @@
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: foo-gcs-bg
+spec:
+  type: Java
+  mode: cluster
+  image: gcr.io/ynli-k8s/spark:v2.3.0-gcs
+  imagePullPolicy: Always
+  hadoopConf:
+    "fs.gs.project.id": "wsdsw-sandbox"
+    "fs.gs.system.bucket": "spark-poc-ca"
+    "google.cloud.auth.service.account.enable": "true"
+    "google.cloud.auth.service.account.json.keyfile": "/creds/google_sa_key.json"
+  volumes:
+    - name: gcp-cred-vm
+      secret:
+        secretName: google-sa-key
+  driver:
+    cores: 1
+    envVars:
+      GCS_PROJECT_ID: wsdsw-sandbox
+    serviceAccount: spark-release-spark
+  executor:
+    instances: 2
+    cores: 1
+    memory: "512m"
+    envVars:
+      GCS_PROJECT_ID: wsdsw-sandbox
